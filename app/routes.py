@@ -23,7 +23,7 @@
                ┃┫┫ ┃┫┫
                ┗┻┛ ┗┻┛
 """
-from flask import render_template
+from flask import render_template, url_for
 
 from app import app
 
@@ -44,5 +44,6 @@ def index():
             'body': '权力的游戏'
         }
     ]
+
 
     return render_template('index.html', title='Home', user=user, posts=posts)
