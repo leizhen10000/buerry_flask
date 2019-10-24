@@ -9,7 +9,11 @@
     {% endif %}
 </head>
 <body>
-<div>Microblog: <a href="{{ url_for('index') }}">Home</a></div>
+<div>
+    Microblog:
+    <a href="{{ url_for('index') }}">主页</a>
+    <a href="{{ url_for('login') }}">登录</a>
+</div>
 <hr>
 {% block content %}
 
