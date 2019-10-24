@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-# @Time    : 19/10/24 10:26
+# @Time    : 19/10/24 10:46
 # @Author  : Lei Zhen
 # @Contract: leizhen8080@gmail.com
 # @Site    : http://www.leizhen.com
@@ -23,4 +23,5 @@
                ┃┫┫ ┃┫┫
                ┗┻┛ ┗┻┛
 """
-print('in tip_wood package')
+
+print('in graphic package')
