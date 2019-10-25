@@ -1,2 +1,6 @@
+werkzeug
 flask
-flask_wtf
+Flask-WTF
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
