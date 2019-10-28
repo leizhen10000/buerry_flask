@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-# @Time    : 19/10/24 09:52
+# @Time    : 19/10/28 14:26
 # @Author  : Lei Zhen
 # @Contract: leizhen8080@gmail.com
 # @Site    : http://www.leizhen.com
-# @File    : __init__.py.py
+# @File    : errors.py
 # @Software: PyCharm
 # code is far away from bugs with the god animal protecting
     I love animals. They taste delicious.
@@ -23,18 +23,17 @@
                ┃┫┫ ┃┫┫
                ┗┻┛ ┗┻┛
 """
-from flask import Flask
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask import render_template
 
-from config import Config
+from app import app, db
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-login = LoginManager(app)
-login.login_view = 'login'
 
-from app import routes, models, errors
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
