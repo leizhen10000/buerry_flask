@@ -31,7 +31,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 
 
-class User(UserMixin,db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -47,6 +47,10 @@ class User(UserMixin,db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
+
 
 class Post(db.Model):
     __tablename__ = 'post'
@@ -57,6 +61,7 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'<Post {self.body}>'
+
 
 @login.user_loader
 def loader_user(id):
