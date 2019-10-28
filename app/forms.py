@@ -24,8 +24,8 @@
                ┗┻┛ ┗┻┛
 """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, TextAreaField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 
 from app.models import User
 
@@ -35,6 +35,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
     remember_me = BooleanField('记住我')
     submit = SubmitField('登陆')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
@@ -50,7 +51,13 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('请输入正确的用户名')
 
-    def validate_email(self,email):
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('请输入正确的邮件')
+
+
+class EditProfileForm(FlaskForm):
+    username = StringField('用户名', validators=[DataRequired()])
+    about_me = TextAreaField('用户简介', validators=[Length(min=0, max=140)])
+    submit = SubmitField('提交修改')

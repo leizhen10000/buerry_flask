@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="../static/buerry.ico">
     {% if title %}
-        <title>{{ title }} - Microblog</title>
+        <title>{{ title }} - 蓝莓网</title>
     {% else %}
-        <title>Welcome to Microblog</title>
+        <title>蓝莓</title>
     {% endif %}
 </head>
 <body>
 
 <div>
-    Microblog:
+    蓝莓:
     <a href="{{ url_for('index') }}">主页</a>
     <a href="{{ url_for('user', username=current_user.username) }}">用户详情</a>
     {% if current_user.is_anonymous %}
