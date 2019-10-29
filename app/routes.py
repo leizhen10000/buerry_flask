@@ -116,7 +116,7 @@ def before_request():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         # 如果是提交表单请求，则根据内容更新用户信息
         current_user.username = form.username.data

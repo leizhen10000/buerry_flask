@@ -62,19 +62,16 @@ if app.debug:
     # 设置文件日志 FileHandler
     if not os.path.exists('logs'):
         os.mkdir('logs')
-    file_hadler = RotatingFileHandler('logs/buerry.log', maxBytes=20240,
-                                      backupCount=10, encoding='utf-8')
-    file_hadler.setFormatter(logging.Formatter(
+    file_handler = RotatingFileHandler('logs/buerry.log', maxBytes=20240,
+                                       backupCount=10, encoding='utf-8')
+    file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]'
     ))
-    file_hadler.setLevel(logging.INFO)
-    app.logger.addHandler(file_hadler)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
 
     # 设置默认日志
     app.logger.setLevel(logging.INFO)
     app.logger.info('蓝莓网项目启动')
-
-    # 测试发送邮件
-    app.logger.error('问题出现了')
 
 from app import routes, models, errors
