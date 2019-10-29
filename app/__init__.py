@@ -24,7 +24,8 @@
                ┗┻┛ ┗┻┛
 """
 import logging
-from logging.handlers import SMTPHandler
+import os
+from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask
 from flask_migrate import Migrate
@@ -40,7 +41,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 
-if not app.debug:
+if app.debug:
     if app.config['MAIL_SERVER']:
         auth = None
         if app.config['MAIL_SERVER'] or app.config['MAIL_PASSWORD']:
@@ -50,13 +51,30 @@ if not app.debug:
             secure = ()
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
-            fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-            toaddrs=app.config['ADMINS'], subject=['buerry'],
+            fromaddr=app.config['MAIL_USERNAME'],
+            toaddrs=app.config['ADMINS'],
+            subject='buerry',
             credentials=auth, secure=secure
         )
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
-print(app.config['MAIL_SERVER'])
+    # 设置文件日志 FileHandler
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+    file_hadler = RotatingFileHandler('logs/buerry.log', maxBytes=20240,
+                                      backupCount=10, encoding='utf-8')
+    file_hadler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]'
+    ))
+    file_hadler.setLevel(logging.INFO)
+    app.logger.addHandler(file_hadler)
+
+    # 设置默认日志
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('蓝莓网项目启动')
+
+    # 测试发送邮件
+    app.logger.error('问题出现了')
 
 from app import routes, models, errors
