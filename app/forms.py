@@ -49,7 +49,7 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('请输入正确的用户名')
+            raise ValidationError('用户名已被注册，请输入新的名称')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()

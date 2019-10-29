@@ -63,8 +63,8 @@ def send_data():
 
     server = smtplib.SMTP('smtp.qq.com', 25)
     server.login(os.environ.get('MAIL_USERNAME'), os.environ.get('MAIL_PASSWORD'))
-    # server = smtplib.SMTP('localhost', 8025)
     server.set_debuglevel(True)
+    # server = smtplib.SMTP('localhost', 8025)
 
     try:
         server.sendmail(username, [username], msg.as_string())
@@ -98,6 +98,6 @@ def handler_using():
 
 if __name__ == '__main__':
     username = os.environ.get('MAIL_USERNAME')
-    # send_data()
+    send_data()
     # mail_process()
-    handler_using()
+    # handler_using()
