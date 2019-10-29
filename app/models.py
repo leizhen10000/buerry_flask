@@ -72,6 +72,21 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
+    # 不使用 添加/删除 关注，而使用 关注/取关，将视图函数的功能移动到模型和其他类、模块中
+    # 即先判断是否已关注，再进行关注/取关
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id
+        ).count() > 0
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
 
 class Post(db.Model):
     __tablename__ = 'post'
