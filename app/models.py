@@ -64,9 +64,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __init__(self, username, email):
+    def __init__(self, username, *args, **kwargs):
+        super(User, self).__init__(*args, **kwargs)
         self.username = username
-        self.email = email
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -93,8 +93,7 @@ class User(UserMixin, db.Model):
             followers,
             (followers.c.followed_id == Post.user_id)
         ) \
-            .filter(followers.c.follower_id == self.id) \
-            .order_by(Post.timestamp.desc())
+            .filter(followers.c.follower_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
