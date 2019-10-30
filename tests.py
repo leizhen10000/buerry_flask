@@ -33,7 +33,7 @@ from app.models import User, Post
 
 class UserModelCase(unittest2.TestCase):
     def setUp(self):
-        app.config['SQLALCHEMY_DATABASE_URL'] = 'sqlite://'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
         db.create_all()
 
     def tearDown(self):
@@ -43,6 +43,7 @@ class UserModelCase(unittest2.TestCase):
     def test_password_hashing(self):
         u = User(username='susan')
         u.set_password('cat')
+        print(app.config['SQLALCHEMY_DATABASE_URI'])
         self.assertFalse(u.check_password('dog'))
         self.assertTrue(u.check_password('cat'))
 
