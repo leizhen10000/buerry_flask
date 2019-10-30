@@ -33,25 +33,25 @@ from app import app, db
 
 # view functions 视图函数
 # 视图函数映射一个或多个 URL
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
+from app.models import User, Post
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    posts = [
-        {
-            'author': {'username': 'Arm'},
-            'body': '我爱你中国'
-        },
-        {
-            'author': {'username': 'Strong'},
-            'body': '权力的游戏'
-        }
-    ]
-    return render_template('index.html', title='主页', posts=posts)
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('提交文章成功')
+        return redirect(url_for('index'))
+
+    posts = current_user.followed_posts().all()
+
+    return render_template('index.html', title='主页', form=form, posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])

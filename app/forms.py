@@ -24,7 +24,7 @@
                ┗┻┛ ┗┻┛
 """
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 
 from app.models import User
@@ -71,3 +71,9 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=username.data).first()
             if user is not None:
                 raise ValidationError('请使用其他用户名')
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField('输入文章内容',
+                         validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('提交')
