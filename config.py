@@ -40,3 +40,5 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['leizhen8080@foxmail.com']
+    # 分页相关配置
+    POST_PER_PAGE = 3  # 显示的页面数

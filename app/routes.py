@@ -49,7 +49,7 @@ def index():
         flash('提交文章成功')
         return redirect(url_for('index'))
 
-    posts = current_user.followed_posts().all()
+    posts = current_user.followed_posts().paginate(1, 5, False).items
 
     return render_template('index.html', title='主页', form=form, posts=posts)
 
@@ -161,3 +161,10 @@ def unfollow(username):
     db.session.commit()
     flash(f'成功取消关注 {username}')
     return redirect(url_for('user', username=username))
+
+
+@app.route('/explore')
+@login_required
+def explore():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', title='全部文章', posts=posts)
