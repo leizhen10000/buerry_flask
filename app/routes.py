@@ -49,9 +49,12 @@ def index():
         flash('提交文章成功')
         return redirect(url_for('index'))
 
-    posts = current_user.followed_posts().paginate(1, 5, False).items
+    # 分页
+    page = request.args.get('page', 1, type=int)
+    posts = current_user.followed_posts().paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
 
-    return render_template('index.html', title='主页', form=form, posts=posts)
+    return render_template('index.html', title='主页', form=form, posts=posts.items)
 
 
 @app.route('/login', methods=['GET', 'POST'])
