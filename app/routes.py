@@ -214,4 +214,4 @@ def reset_password(token):
         db.session.commit()
         flash('你的密码已经被重置，请重新登录')
         return redirect(url_for('login'))
-    return render_template('')
+    return render_template('reset_password.html', form=form)
