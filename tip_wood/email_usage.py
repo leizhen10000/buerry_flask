@@ -30,6 +30,8 @@ import smtplib
 from email.mime.text import MIMEText
 from logging.handlers import SMTPHandler
 
+from flask_mail import Message
+
 
 def mail_process():
     # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -96,8 +98,17 @@ def handler_using():
     logger.error('这应该没错了 chage server username subject')
 
 
+def flask_mail_using():
+    msg = Message('test subject', sender='leizhen8080@foxmail', recipients=['leizhen8080@foxmail.com'])
+    msg.body = 'text body'
+    msg.html = '<h1>HTML body</h1>'
+    from app import mail
+    mail.send(msg)
+
+
 if __name__ == '__main__':
     username = os.environ.get('MAIL_USERNAME')
-    send_data()
+    # send_data()
     # mail_process()
     # handler_using()
+    flask_mail_using()
