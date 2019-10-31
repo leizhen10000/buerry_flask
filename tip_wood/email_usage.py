@@ -27,6 +27,7 @@ import email
 import logging
 import os
 import smtplib
+from email.header import Header
 from email.mime.text import MIMEText
 from logging.handlers import SMTPHandler
 
@@ -74,6 +75,21 @@ def send_data():
         server.quit()
 
 
+def send_local_server_data():
+    msg = MIMEText('this is body')
+
+    msg['To'] = email.utils.formataddr(('接收方', username))
+    msg['From'] = email.utils.formataddr(('发送方', username))
+    msg['Subject'] = Header('一个简单的测试消息', 'utf-8')
+
+    server = smtplib.SMTP('localhost', 8025)
+
+    try:
+        server.sendmail(username, [username], msg.as_string())
+    finally:
+        server.quit()
+
+
 def handler_using():
     print('server', os.environ.get('MAIL_SERVER'))
     server = os.environ.get('MAIL_SERVER')
@@ -111,4 +127,5 @@ if __name__ == '__main__':
     # send_data()
     # mail_process()
     # handler_using()
-    flask_mail_using()
+    # flask_mail_using()
+    send_local_server_data()
