@@ -188,3 +188,4 @@ dmypy.json
 
 .idea/
 package.json
+/app.db
