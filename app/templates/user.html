@@ -12,7 +12,7 @@
                     <p>{{ user.about_me }}</p>
                 {% endif %}
                 {% if user.last_seen %}
-                    <p>最后一次登录：{{ user.last_seen }}</p>
+                    <p>最近活跃：{{ moment(user.last_seen).fromNow() }}</p>
                 {% endif %}
                 <p>{{ user.followers.count() }} 粉丝，{{ user.followed.count() }} 关注。</p>
                 {% if user  == current_user %}
