@@ -37,47 +37,64 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-login = LoginManager(app)
+db = SQLAlchemy()
+migrate = Migrate()
+login = LoginManager()
 login.login_view = 'login'
-mail = Mail(app)
-bootstrap = Bootstrap(app)
-moment = Moment(app)
+login.login_message = '请先登录'
+mail = Mail()
+bootstrap = Bootstrap()
+moment = Moment()
 
-if app.debug:
-    if app.config['MAIL_SERVER']:
-        auth = None
-        if app.config['MAIL_SERVER'] or app.config['MAIL_PASSWORD']:
-            auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
-        secure = None
-        if app.config['MAIL_USE_TLS']:
-            secure = ()
-        mail_handler = SMTPHandler(
-            mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
-            fromaddr=app.config['MAIL_USERNAME'],
-            toaddrs=app.config['ADMINS'],
-            subject='buerry',
-            credentials=auth, secure=secure
-        )
-        mail_handler.setLevel(logging.ERROR)
-        app.logger.addHandler(mail_handler)
 
-    # 设置文件日志 FileHandler
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
-    file_handler = RotatingFileHandler('logs/buerry.log', maxBytes=20240,
-                                       backupCount=10, encoding='utf-8')
-    file_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]'
-    ))
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    mail.init_app(app)
+    bootstrap.init_app(app)
+    moment.init_app(app)
 
-    # 设置默认日志
-    app.logger.setLevel(logging.INFO)
-    app.logger.info('蓝莓网项目启动')
+    from app.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
-from app import routes, models, errors
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+
+    if app.debug:
+        if app.config['MAIL_SERVER']:
+            auth = None
+            if app.config['MAIL_SERVER'] or app.config['MAIL_PASSWORD']:
+                auth = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+            secure = None
+            if app.config['MAIL_USE_TLS']:
+                secure = ()
+            mail_handler = SMTPHandler(
+                mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
+                fromaddr=app.config['MAIL_USERNAME'],
+                toaddrs=app.config['ADMINS'],
+                subject='buerry',
+                credentials=auth, secure=secure
+            )
+            mail_handler.setLevel(logging.ERROR)
+            app.logger.addHandler(mail_handler)
+
+        # 设置文件日志 FileHandler
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        file_handler = RotatingFileHandler('logs/buerry.log', maxBytes=20240,
+                                           backupCount=10, encoding='utf-8')
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]'
+        ))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+
+        # 设置默认日志
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('蓝莓网项目启动')
+
+
+from app import routes, models
