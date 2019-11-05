@@ -90,7 +90,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash("你的修改已经保存")
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('main.edit_profile'))
     elif request.method == 'GET':
         # 如果为 get 请求，则显示当前的用户信息
         form.username.data = current_user.username

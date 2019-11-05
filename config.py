@@ -42,3 +42,9 @@ class Config:
     ADMINS = ['leizhen8080@foxmail.com']
     # 分页相关配置
     POSTS_PER_PAGE = 4  # 显示的页面数
+
+
+class TestConfig(Config):
+    # 测试相关
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'

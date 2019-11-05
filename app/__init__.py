@@ -63,7 +63,10 @@ def create_app(config_class=Config):
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    if app.debug:
+    from app.main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    if app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
             auth = None
             if app.config['MAIL_SERVER'] or app.config['MAIL_PASSWORD']:
@@ -96,5 +99,7 @@ def create_app(config_class=Config):
         app.logger.setLevel(logging.INFO)
         app.logger.info('蓝莓网项目启动')
 
+    return app
 
-from app import routes, models
+
+from app import models
