@@ -24,14 +24,18 @@
                ┗┻┛ ┗┻┛
 """
 
+
 def spam():
     print('this is spam method')
+
 
 def grok():
     print('this is grok method')
 
+
 def aps():
     print('this is aps method')
+
 
 blah = 42
 

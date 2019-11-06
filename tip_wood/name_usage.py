@@ -26,11 +26,14 @@
 print('out of main')
 print(__name__)
 
+
 def f():
     print('in f function')
 
+
 class A():
     pass
+
 
 if __name__ == '__main__':
     f()
