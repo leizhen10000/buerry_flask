@@ -40,7 +40,7 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-login.login_view = 'login'
+login.login_view = 'auth.login'
 login.login_message = '请先登录'
 mail = Mail()
 bootstrap = Bootstrap()
@@ -49,7 +49,7 @@ moment = Moment()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
