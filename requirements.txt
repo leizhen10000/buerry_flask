@@ -25,4 +25,4 @@ urllib3
 visitor
 Werkzeug
 WTForms
-pytyhon-dotenv
+python-dotenv

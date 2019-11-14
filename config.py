@@ -24,14 +24,21 @@
                ┗┻┛ ┗┻┛
 """
 import os
+import sys
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
+
+WIN = sys.platform.startswith('win')
+if WIN:  # win 系统使用三个斜杠
+    prefix = 'sqlite:///'
+else:  # 类 unix 系统使用四个斜杠
+    prefix = 'sqlite:////'
 
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'ufuzbcyz_kiss_na'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(base_dir, 'app.db')
+                              prefix + os.path.join(base_dir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # 邮箱信息
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'localhost'

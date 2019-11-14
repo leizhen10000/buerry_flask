@@ -4,7 +4,8 @@
     <table class="table table-hover">
         <tr>
             <td width="256px">
-                <img src="../static/{{ user.username }}.jpg" title="{{ user.username }}" width="100%"/>
+                <img src="{{ url_for('static', filename=user.username+'.jpg') }}"
+                     title="{{ user.username }}" width="100%" alt="{{ user.username }}"/>
             </td>
             <td>
                 <h1>诗人: {{ user.username }}</h1>
